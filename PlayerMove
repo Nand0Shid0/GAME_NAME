@@ -1,0 +1,53 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class WASD_Player : MonoBehaviour
+{
+    // Start is called before the first frame update
+
+    //Vector2 pos = posit
+    private Rigidbody2D rb2d;
+    Vector2 v2P;
+    private float speed = (float)100.0;
+    private Animator playerAnimator;
+
+    void Start()
+    {
+        rb2d = GetComponent<Rigidbody2D>();
+        playerAnimator = GetComponent<Animator>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+        float movex = Input.GetAxis("Horizontal");
+        float movey = Input.GetAxis("Vertical");
+        v2P = new Vector2(movex, movey).normalized;
+
+        /*v2P.x = Input.GetAxis("Horizontal");
+        v2P.y = Input.GetAxis("Vertical");*/
+
+        playerAnimator.SetFloat("Horizontal", v2P.x);
+        playerAnimator.SetFloat("Vertical", v2P.y);
+        playerAnimator.SetFloat("Speed", v2P.sqrMagnitude);
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            speed = (float)175.0;
+        }else if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            speed = (float)100.0;
+        }
+
+    }
+
+    private void FixedUpdate()
+    {
+
+        //rb2d.MovePosition(v2P * speed * Time.fixedDeltaTime);
+        rb2d.velocity = (v2P * speed * Time.fixedDeltaTime);
+
+    }
+}
